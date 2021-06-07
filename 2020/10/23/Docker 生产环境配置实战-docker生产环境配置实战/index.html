@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="简介：本文将详细介绍基于Docker生产环境的相关配置及应用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 生产环境配置实战">
+<meta property="og:url" content="https://aqhi.net/2020/10/23/Docker%20%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98-docker%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="简介：本文将详细介绍基于Docker生产环境的相关配置及应用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-23T00:10:10.000Z">
+<meta property="article:modified_time" content="2020-10-24T14:35:49.020Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://aqhi.net/2020/10/23/Docker%20%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98-docker%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2020&#x2F;10&#x2F;23&#x2F;Docker%20%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98-docker%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;10&#x2F;23&#x2F;Docker 生产环境配置实战-docker生产环境配置实战&#x2F;&quot;,&quot;title&quot;:&quot;Docker 生产环境配置实战&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Docker 生产环境配置实战 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E7%9B%B8%E5%85%B3%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">Docker 参数配置相关建议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4docker%E7%9B%B8%E5%85%B3%E7%9A%84%E6%96%87%E4%BB%B6%E5%85%B7%E6%9C%89%E5%90%88%E9%80%82%E7%9A%84%E6%9D%83%E9%99%90"><span class="nav-number">1.1.</span> <span class="nav-text">确认docker相关的文件具有合适的权限</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%A1%E6%A0%B8-Docker-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="nav-number">1.2.</span> <span class="nav-text">审核 Docker 文件和目录</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E5%AE%B9%E5%99%A8%E7%9A%84%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E9%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">限制容器的内存使用量</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E8%AE%BE%E7%BD%AE%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95%E7%BA%A7%E5%88%AB"><span class="nav-number">1.4.</span> <span class="nav-text">2.设置日志记录级别</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">描述</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-3"><span class="nav-number">1.5.</span> <span class="nav-text">加固建议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%90%E5%88%B6%E5%AE%B9%E5%99%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E9%87%8F"><span class="nav-number">1.6.</span> <span class="nav-text">限制容器之间的网络流量</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BADocker%E5%90%AF%E7%94%A8%E5%86%85%E5%AE%B9%E4%BF%A1%E4%BB%BB"><span class="nav-number">1.7.</span> <span class="nav-text">为Docker启用内容信任</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-5"><span class="nav-number">1.7.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-5"><span class="nav-number">1.7.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%81%E8%AE%B8Docker%E5%AF%B9iptables%E8%BF%9B%E8%A1%8C%E6%9B%B4%E6%94%B9"><span class="nav-number">1.8.</span> <span class="nav-text">允许Docker对iptables进行更改</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-6"><span class="nav-number">1.8.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-6"><span class="nav-number">1.8.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8aufs%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.9.</span> <span class="nav-text">不要使用aufs存储驱动程序</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-7"><span class="nav-number">1.9.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-7"><span class="nav-number">1.9.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E7%89%B9%E6%9D%83%E5%AE%B9%E5%99%A8"><span class="nav-number">1.10.</span> <span class="nav-text">不要使用特权容器</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-8"><span class="nav-number">1.10.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8A%A0%E5%9B%BA%E5%BB%BA%E8%AE%AE-8"><span class="nav-number">1.10.2.</span> <span class="nav-text">加固建议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-JAVA%E7%A8%8B%E5%BA%8F%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">Docker JAVA程序参数配置建议</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2020/10/23/Docker%20%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98-docker%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker 生产环境配置实战
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-23 08:10:10" itemprop="dateCreated datePublished" datetime="2020-10-23T08:10:10+08:00">2020-10-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-24 22:35:49" itemprop="dateModified" datetime="2020-10-24T22:35:49+08:00">2020-10-24</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介：本文将详细介绍基于Docker生产环境的相关配置及应用。</p>
+<span id="more"></span>
+
+
+<p>[TOC]</p>
+<h4 id="Docker-参数配置相关建议"><a href="#Docker-参数配置相关建议" class="headerlink" title="Docker 参数配置相关建议"></a>Docker 参数配置相关建议</h4><h5 id="确认docker相关的文件具有合适的权限"><a href="#确认docker相关的文件具有合适的权限" class="headerlink" title="确认docker相关的文件具有合适的权限"></a>确认docker相关的文件具有合适的权限</h5><h6 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h6><p>确保可能包含敏感参数的文件和目录的安全对确保Docker守护程序的正确和安全运行至关重要</p>
+<h6 id="加固建议"><a href="#加固建议" class="headerlink" title="加固建议"></a>加固建议</h6><p>执行以下命令为 <code>Docker</code> 相关文件配置权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chown root:root /usr/lib/systemd/system/docker.service</span><br><span class="line">chmod 644 /usr/lib/systemd/system/docker.service</span><br><span class="line">chown root:root /usr/lib/systemd/system/docker.socket</span><br><span class="line">chmod 644 /usr/lib/systemd/system/docker.socket</span><br><span class="line">chown root:root /etc/docker</span><br><span class="line">chmod 755 /etc/docker</span><br></pre></td></tr></table></figure>
+
+<p>若文件路径与实际系统中不同可以使用以下命令获取文件路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl show -p FragmentPath docker.socket</span><br><span class="line">systemctl show -p FragmentPath docker.service</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="审核-Docker-文件和目录"><a href="#审核-Docker-文件和目录" class="headerlink" title="审核 Docker 文件和目录"></a>审核 <code>Docker</code> 文件和目录</h5><h6 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h6><p>除了审核常规的 <code>Linux</code> 文件系统和系统调用之外，还审核所有与Docker相关的文件和目录。 <code>Docker</code> 守护程序以<code>root</code>特权运行。 其行为取决于某些关键文件和目录。如 <code>/var/lib/docker</code>、<code>/etc/docker</code>、<code>docker.service</code>、 <code>docker.socket</code>、<code>/usr/bin/docker-containerd</code>、<code>/usr/bin/docker-runc</code> 等文件和目录</p>
+<h6 id="加固建议-1"><a href="#加固建议-1" class="headerlink" title="加固建议"></a>加固建议</h6><p>在/etc/audit/audit.rules与/etc/audit/rules.d/audit.rules文件中添加以下行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-w /var/lib/docker -k docker</span><br><span class="line">-w /etc/docker -k docker</span><br><span class="line">-w /usr/lib/systemd/system/docker.service -k docker</span><br><span class="line">-w /usr/lib/systemd/system/docker.socket -k docker</span><br><span class="line">-w /usr/bin/docker-containerd -k docker</span><br><span class="line">-w /usr/bin/docker-runc -k docker</span><br></pre></td></tr></table></figure>
+
+<p>然后，重新启动 <code>audit</code> 程序。 例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service auditd restart</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="限制容器的内存使用量"><a href="#限制容器的内存使用量" class="headerlink" title="限制容器的内存使用量"></a>限制容器的内存使用量</h5><h6 id="描述-2"><a href="#描述-2" class="headerlink" title="描述"></a>描述</h6><p>默认情况下，<code>Docker</code> 主机上的所有容器均等地共享资源。 通过使用Docker主机的资源管理功能（例如内存限制），您可以控制容器可能消耗的内存量。</p>
+<p>默认情况下，容器可以使用主机上的所有内存。 您可以使用内存限制机制来防止由于一个容器消耗主机的所有资源而导致的服务拒绝，从而使同一主机上的其他容器无法执行其预期的功能。 对内存没有限制可能会导致一个问题，即一个容器很容易使整个系统不稳定并因此无法使用。</p>
+<h6 id="加固建议-2"><a href="#加固建议-2" class="headerlink" title="加固建议"></a>加固建议</h6><ul>
+<li>仅使用所需的内存来运行容器。 始终使用 <code>--memory</code> 参数运行容器。 您应该按以下方式启动容器：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --interactive --tty --memory 256m &lt;Container Image Name or ID&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="2-设置日志记录级别"><a href="#2-设置日志记录级别" class="headerlink" title="2.设置日志记录级别"></a>2.设置日志记录级别</h5><h6 id="描述-3"><a href="#描述-3" class="headerlink" title="描述"></a>描述</h6><p>设置适当的日志级别，将 <code>Docker</code> 守护程序配置为记录您以后想要查看的事件。 基本日志级别为 <code>info</code> 及更高版本将捕获除调试日志以外的所有日志。 直到且除非有必要，否则您不应在 <code>debug</code> 日志级别运行 <code>Docker</code> 守护程序</p>
+<h5 id="加固建议-3"><a href="#加固建议-3" class="headerlink" title="加固建议"></a>加固建议</h5><p>运行Docker守护程序，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dockerd --log-level=info</span><br></pre></td></tr></table></figure>
+
+<p>若以 <code>systemctl</code> 管理 <code>docker</code> 服务则需要编辑 <code>/usr/lib/systemd/system/docker.service</code> 的 <code>ExecStart</code> 参数添加 <code>--log-level=&quot;info&quot;</code>，并重启 <code>docker</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="限制容器之间的网络流量"><a href="#限制容器之间的网络流量" class="headerlink" title="限制容器之间的网络流量"></a>限制容器之间的网络流量</h5><h6 id="描述-4"><a href="#描述-4" class="headerlink" title="描述"></a>描述</h6><p>默认情况下，同一主机上的容器之间允许所有网络通信。 如果不需要，请限制所有容器间的通信。 将需要相互通信的特定容器链接在一起。默认情况下，同一主机上所有容器之间都启用了不受限制的网络流量。 因此，每个容器都有可能读取同一主机上整个容器网络上的所有数据包。 这可能会导致意外和不必要的信息泄露给其他容器。 因此，限制容器间的通信。</p>
+<h6 id="加固建议-4"><a href="#加固建议-4" class="headerlink" title="加固建议"></a>加固建议</h6><p>在守护程序模式下运行 <code>docker</code> 并传递 <code>--icc = false</code> 作为参数。 例如，</p>
+<p><code>/usr/bin/dockerd --icc=false</code><br>若使用systemctl管理docker服务则需要编辑</p>
+<p><code>/usr/lib/systemd/system/docker.service</code><br>文件中的ExecStart参数添加 –icc=false选项 然后重启docker服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="为Docker启用内容信任"><a href="#为Docker启用内容信任" class="headerlink" title="为Docker启用内容信任"></a>为Docker启用内容信任</h5><h6 id="描述-5"><a href="#描述-5" class="headerlink" title="描述"></a>描述</h6><p>默认情况下禁用内容信任。 您应该启用它。<br>内容信任提供了将数字签名用于发送到远程Docker注册表和从远程Docker注册表接收的数据的功能。 这些签名允许客户端验证特定图像标签的完整性和发布者。 这确保了容器图像的出处</p>
+<h6 id="加固建议-5"><a href="#加固建议-5" class="headerlink" title="加固建议"></a>加固建议</h6><p>要在 <code>bash shell</code> 中启用内容信任，请输入以下命令：<code>export DOCKER_CONTENT_TRUST=1</code> 或者，在您的配置文件中设置此环境变量，以便在每次登录时启用内容信任。 内容信任目前仅适用于公共Docker Hub的用户。 当前不适用于Docker Trusted Registry或私有注册表。</p>
+<h5 id="允许Docker对iptables进行更改"><a href="#允许Docker对iptables进行更改" class="headerlink" title="允许Docker对iptables进行更改"></a>允许Docker对iptables进行更改</h5><h6 id="描述-6"><a href="#描述-6" class="headerlink" title="描述"></a>描述</h6><p><code>iptables</code> 用于在 <code>Linu</code> x内核中设置，维护和检查IP数据包过滤器规则表。 允许 <code>Docker</code> 守护程序对 <code>iptables</code> 进行更改。<br>如果您选择这样做，<code>Docker</code> 将永远不会对您的系统 <code>iptables</code> 规则进行更改。 如果允许，<code>Docker</code> 服务器将根据您为容器选择网络选项的方式自动对 <code>iptables</code> 进行所需的更改。 建议让 <code>Docker</code>服务器自动对 <code>iptable</code> s进行更改，以避免网络配置错误，这可能会妨碍容器之间以及与外界的通信。 此外，每次选择运行容器或修改网络选项时，它都可以避免更新 <code>iptables</code> 的麻烦。</p>
+<h6 id="加固建议-6"><a href="#加固建议-6" class="headerlink" title="加固建议"></a>加固建议</h6><p>不使用 <code>--iptables = false</code> 参数运行 <code>Docker</code> 守护程序。 若以 <code>systemctl</code> 管理 <code>docker</code> 服务则需要编辑 <code>/usr/lib/systemd/system/docker.service</code> 的 <code>ExecStart</code> 参数删除 <code>--iptables = false</code> ， 重启 <code>docker</code> 服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="不要使用aufs存储驱动程序"><a href="#不要使用aufs存储驱动程序" class="headerlink" title="不要使用aufs存储驱动程序"></a>不要使用aufs存储驱动程序</h5><h6 id="描述-7"><a href="#描述-7" class="headerlink" title="描述"></a>描述</h6><p><code>aufs</code> 存储驱动程序是最早的存储驱动程序。 它基于 <code>Linux</code> 内核补丁集，该补丁集不太可能合并到主要 <code>Linux</code> 内核中。 还已知<code>aufs</code> 驱动程序会导致一些严重的内核崩溃。 <code>aufs</code> 刚刚获得了<code>Docker</code> 的支持。 最重要的是，许多使用最新 <code>Linux</code> 内核的<code>Linux</code> 发行版都不支持 <code>aufs</code> 驱动程序。</p>
+<h6 id="加固建议-7"><a href="#加固建议-7" class="headerlink" title="加固建议"></a>加固建议</h6><p>不要明确使用 <code>aufs</code> 作为存储驱动程序。 例如，请勿按以下方式启动<code>Docker</code> 守护程序： 若以 <code>systemctl</code> 管理 <code>docker</code> 服务则需要编辑 <code>/usr/lib/systemd/system/docker.service</code> 的<code>ExecStart</code> 参数删除 <code>--storage-driver aufs</code> 重启 <code>docker</code> 服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="不要使用特权容器"><a href="#不要使用特权容器" class="headerlink" title="不要使用特权容器"></a>不要使用特权容器</h5><h6 id="描述-8"><a href="#描述-8" class="headerlink" title="描述"></a>描述</h6><p>使用 <code>--privileged</code> 标志将所有 <code>Linux</code> 内核功能赋予容器，从而覆盖 <code>--cap-add</code> 和 <code>--cap-drop</code> 标志。 确保不使用它。<br><code>--privileged</code> 标志为容器提供了所有功能，并且还解除了设备<code>cgroup</code> 控制器强制执行的所有限制。 换句话说，容器可以完成主机可以做的几乎所有事情。 存在此标志是为了允许特殊用例，例如在<code>Docker</code> 中运行 <code>Docker</code></p>
+<h6 id="加固建议-8"><a href="#加固建议-8" class="headerlink" title="加固建议"></a>加固建议</h6><p>不要使用 <code>--privileged</code> 标志运行容器</p>
+<h4 id="Docker-JAVA程序参数配置建议"><a href="#Docker-JAVA程序参数配置建议" class="headerlink" title="Docker JAVA程序参数配置建议"></a>Docker JAVA程序参数配置建议</h4>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/13/%E4%BA%8C%E5%8F%89%E6%A0%91%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E5%BA%94%E7%94%A8-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E5%BA%94%E7%94%A8/" rel="prev" title="二叉树、红黑树的数据结构及应用">
+                  <i class="fa fa-chevron-left"></i> 二叉树、红黑树的数据结构及应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/23/%E9%9D%A2%E7%AD%8B-%E9%9D%A2%E7%AD%8Bmd/" rel="next" title="面筋">
+                  面筋 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

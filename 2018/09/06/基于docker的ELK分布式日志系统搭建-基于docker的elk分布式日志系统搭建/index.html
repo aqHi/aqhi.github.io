@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="简介ELK (ElasticSearch, Logstash, Kibana)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于docker的ELK分布式日志系统搭建">
+<meta property="og:url" content="https://aqhi.net/2018/09/06/%E5%9F%BA%E4%BA%8Edocker%E7%9A%84ELK%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA-%E5%9F%BA%E4%BA%8Edocker%E7%9A%84elk%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="简介ELK (ElasticSearch, Logstash, Kibana)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cdn.aqhi.net/elkplatform.png">
+<meta property="og:image" content="http://cdn.aqhi.net/elasticsearch.png">
+<meta property="og:image" content="http://cdn.aqhi.net/logstash.png">
+<meta property="og:image" content="http://cdn.aqhi.net/kibana.png">
+<meta property="article:published_time" content="2018-09-06T11:10:20.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:02:41.935Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.aqhi.net/elkplatform.png">
+
+
+<link rel="canonical" href="https://aqhi.net/2018/09/06/%E5%9F%BA%E4%BA%8Edocker%E7%9A%84ELK%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA-%E5%9F%BA%E4%BA%8Edocker%E7%9A%84elk%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2018&#x2F;09&#x2F;06&#x2F;%E5%9F%BA%E4%BA%8Edocker%E7%9A%84ELK%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA-%E5%9F%BA%E4%BA%8Edocker%E7%9A%84elk%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA&#x2F;&quot;,&quot;path&quot;:&quot;2018&#x2F;09&#x2F;06&#x2F;基于docker的ELK分布式日志系统搭建-基于docker的elk分布式日志系统搭建&#x2F;&quot;,&quot;title&quot;:&quot;基于docker的ELK分布式日志系统搭建&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>基于docker的ELK分布式日志系统搭建 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85ELK"><span class="nav-number">2.</span> <span class="nav-text">安装ELK</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8E%E8%BF%9C%E7%A8%8B%E6%8F%90%E5%8F%96%E9%95%9C%E5%83%8F"><span class="nav-number">2.0.1.</span> <span class="nav-text">从远程提取镜像</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%AE%B9%E5%99%A8"><span class="nav-number">2.0.2.</span> <span class="nav-text">运行容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E8%B5%B7%E6%9D%A5%E5%90%8E"><span class="nav-number">2.0.3.</span> <span class="nav-text">容器运行起来后</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.0.4.</span> <span class="nav-text">配置</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2018/09/06/%E5%9F%BA%E4%BA%8Edocker%E7%9A%84ELK%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA-%E5%9F%BA%E4%BA%8Edocker%E7%9A%84elk%E5%88%86%E5%B8%83%E5%BC%8F%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于docker的ELK分布式日志系统搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-06 19:10:20" itemprop="dateCreated datePublished" datetime="2018-09-06T19:10:20+08:00">2018-09-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-23 16:02:41" itemprop="dateModified" datetime="2020-10-23T16:02:41+08:00">2020-10-23</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>ELK (ElasticSearch, Logstash, Kibana)</p>
+<span id="more"></span>
+<ul>
+<li><p>架构概述<br><img src="http://cdn.aqhi.net/elkplatform.png"></p>
+</li>
+<li><p>ElasticSearch</p>
+<p>  Elasticsearch 是一个分布式、可扩展、实时的搜索与数据分析的开源搜索引擎。此处我们不深究其强大的功能，仅仅用来检索日志。<br><img src="http://cdn.aqhi.net/elasticsearch.png"></p>
+</li>
+<li><p>Logstash</p>
+<p>  Logstash 是开源的服务器端数据处理管道，能够同时从多个来源采集数据，转换数据，然后将数据发送到您最喜欢的 “存储库” 中。<br><img src="http://cdn.aqhi.net/logstash.png"></p>
+</li>
+<li><p>Kinaba</p>
+</li>
+</ul>
+<p>Kibana 是一款开源的数据分析和可视化平台，它是 Elastic Stack 成员之一，设计用于和 Elasticsearch 协作。您可以使用 Kibana 对 Elasticsearch 索引中的数据进行搜索、查看、交互操作。您可以很方便的利用图表、表格及地图对数据进行多元化的分析和呈现。</p>
+<p>Kibana 可以使大数据通俗易懂。它很简单，基于浏览器的界面便于您快速创建和分享动态数据仪表板来追踪 Elasticsearch 的实时数据变化。<br><img src="http://cdn.aqhi.net/kibana.png"></p>
+<h3 id="安装ELK"><a href="#安装ELK" class="headerlink" title="安装ELK"></a>安装ELK</h3><p>此处使用ELK合并的<a target="_blank" rel="noopener" href="http://elk-docker.readthedocs.io/">elk-docker</a></p>
+<h5 id="从远程提取镜像"><a href="#从远程提取镜像" class="headerlink" title="从远程提取镜像"></a>从远程提取镜像</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull sebp/elk</span><br></pre></td></tr></table></figure>
+
+<p>默认提取最新镜像,如果要使用其他版本，使用如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull sebp/elk:E1L1K4</span><br></pre></td></tr></table></figure>
+
+<p>此命令(E1L1K4)表示使用 Elasticsearch 1.x ， Logstash 1.x ，Kibana 4.x 。</p>
+<h5 id="运行容器"><a href="#运行容器" class="headerlink" title="运行容器"></a>运行容器</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name elk sebp/elk</span><br></pre></td></tr></table></figure>
+
+<p>此命令将暴露以下端口，分别是三个程序所需要的：</p>
+<ul>
+<li>5061 (Kibana Web 端口).</li>
+<li>9200 (Elasticsearch JSON 端口).</li>
+<li>5044 (Logstash Beats 端口, Logstash 接受日志的端口，如来自filebeats的日志).</li>
+</ul>
+<p>附：</p>
+<ul>
+<li>docker run -p xxx:yyy  表示将容器yyy端口映射到主机xxx端口</li>
+</ul>
+<h5 id="容器运行起来后"><a href="#容器运行起来后" class="headerlink" title="容器运行起来后"></a>容器运行起来后</h5><p> 访问<a href="http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功">http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功</a></p>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/09/03/Executors%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-executors%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="prev" title="Executors 源码解析">
+                  <i class="fa fa-chevron-left"></i> Executors 源码解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/06/Redis%E8%BF%81%E7%A7%BB%E4%B9%8B%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5-redis%E8%BF%81%E7%A7%BB%E4%B9%8B%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/" rel="next" title="Redis迁移之主从同步">
+                  Redis迁移之主从同步 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

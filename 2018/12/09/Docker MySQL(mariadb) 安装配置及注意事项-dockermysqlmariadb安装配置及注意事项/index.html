@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="简介：本文将详细介绍基于Docker的MySQL数据库的安装，配置及注意事项。以下内容均为实际应用中遇到的具体情况。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker MySQL(mariadb) 安装配置及注意事项">
+<meta property="og:url" content="https://aqhi.net/2018/12/09/Docker%20MySQL(mariadb)%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-dockermysqlmariadb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="简介：本文将详细介绍基于Docker的MySQL数据库的安装，配置及注意事项。以下内容均为实际应用中遇到的具体情况。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-09T14:10:10.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:02:39.396Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://aqhi.net/2018/12/09/Docker%20MySQL(mariadb)%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-dockermysqlmariadb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2018&#x2F;12&#x2F;09&#x2F;Docker%20MySQL(mariadb)%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-dockermysqlmariadb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9&#x2F;&quot;,&quot;path&quot;:&quot;2018&#x2F;12&#x2F;09&#x2F;Docker MySQL(mariadb) 安装配置及注意事项-dockermysqlmariadb安装配置及注意事项&#x2F;&quot;,&quot;title&quot;:&quot;Docker MySQL(mariadb) 安装配置及注意事项&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Docker MySQL(mariadb) 安装配置及注意事项 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">MySQL安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%90%9C%E7%B4%A2%E9%95%9C%E5%83%8F"><span class="nav-number">1.1.</span> <span class="nav-text">1. 搜索镜像</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F-%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">2. 拉取镜像(指定版本)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">3. 运行命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8E%88%E6%9D%83"><span class="nav-number">2.</span> <span class="nav-text">MySQL创建用户并授权</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7"><span class="nav-number">2.1.</span> <span class="nav-text">1. 创建用户</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%8E%88%E6%9D%83"><span class="nav-number">2.2.</span> <span class="nav-text">2.授权</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">MySQL配置</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2018/12/09/Docker%20MySQL(mariadb)%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-dockermysqlmariadb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker MySQL(mariadb) 安装配置及注意事项
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-12-09 22:10:10" itemprop="dateCreated datePublished" datetime="2018-12-09T22:10:10+08:00">2018-12-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-23 16:02:39" itemprop="dateModified" datetime="2020-10-23T16:02:39+08:00">2020-10-23</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>简介：本文将详细介绍基于Docker的MySQL数据库的安装，配置及注意事项。以下内容均为实际应用中遇到的具体情况。</p>
+<span id="more"></span>
+
+
+
+<h4 id="MySQL安装"><a href="#MySQL安装" class="headerlink" title="MySQL安装"></a>MySQL安装</h4><h5 id="1-搜索镜像"><a href="#1-搜索镜像" class="headerlink" title="1. 搜索镜像"></a>1. 搜索镜像</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ docker search mysql</span><br><span class="line">NAME                                                   DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED</span><br><span class="line">mysql                                                  MySQL is a widely used, open-source relation…   7859                [OK]</span><br><span class="line">mariadb                                                MariaDB is a community-developed fork of MyS…   2608                [OK]</span><br><span class="line">mysql/mysql-server                                     Optimized MySQL Server Docker images. Create…   592                                     [OK]</span><br><span class="line">···</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-拉取镜像-指定版本"><a href="#2-拉取镜像-指定版本" class="headerlink" title="2. 拉取镜像(指定版本)"></a>2. 拉取镜像(指定版本)</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-运行命令"><a href="#3-运行命令" class="headerlink" title="3. 运行命令"></a>3. 运行命令</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ docker run --name mysql \</span><br><span class="line">-p 3306:3306 \</span><br><span class="line">-v /data/mysql:/var/lib/mysql \</span><br><span class="line">-v /etc/mysql/conf.d:/etc/mysql/conf.d \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=&#x27;root&#x27; \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-p 3306:3306</code> 将docker容器3306端口映射到本机3306端口。</li>
+<li><code>-v /data/mysql:/var/lib/mysql</code> 将主机 <code>/data/mysql</code> 目录挂载到容器的 <code>/var/lib/mysql</code></li>
+<li><code>-v /etc/mysql/conf.d:/etc/mysql/conf.d</code> 将主机 <code>/etc/mysql/conf.d</code> 目录挂载到容器的对应目录，此目录为配置目录，方便对mysql配置进行管理。</li>
+<li><code>-e MYSQL_ROOT_PASSWORD=&#39;root&#39;</code> 初始化root密码。-e 传参数</li>
+<li><code>-d </code> 后台运行</li>
+</ul>
+<h4 id="MySQL创建用户并授权"><a href="#MySQL创建用户并授权" class="headerlink" title="MySQL创建用户并授权"></a>MySQL创建用户并授权</h4><h5 id="1-创建用户"><a href="#1-创建用户" class="headerlink" title="1. 创建用户"></a>1. 创建用户</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE USER &#x27;username&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>@localhost</code> 表示只允许本本机进行连接，如果需要外网(ip)连接，一般使用 <code>%</code> 替换。</li>
+</ul>
+<h5 id="2-授权"><a href="#2-授权" class="headerlink" title="2.授权"></a>2.授权</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON * . * TO &#x27;newuser&#x27;@&#x27;localhost&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>完成授权后，请务必重新加载所有权限。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>* . *</code> 表示授予该用户所有数据库下的所有权限(root权限)，切忌在生产环境这样操作，非常危险。一般按业务給不同用户不同的权限。</li>
+</ul>
+<p>给数据分析用户只读从库的权限：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT SELECT ON database_name . table_name  TO &#x27;data&#x27;@&#x27;localhost&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>给程序授权某张表的全部权限：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON database_name . table_name  TO &#x27;username&#x27;@&#x27;localhost&#x27;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="MySQL配置"><a href="#MySQL配置" class="headerlink" title="MySQL配置"></a>MySQL配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[client]</span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set=utf8mb4</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">character-set-server = utf8mb4</span><br><span class="line">collation-server = utf8mb4_general_ci</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>这里直接使用 <code>utf8mb4</code> 而不要使用 <code>utf8</code> ,实际应用中 <code>utf8</code> 编码无法存储一些特殊字符，比如 <code>emoji</code> 表情，昵称、评论、帖子等都有可能受到影响。(最初的 UTF-8 格式使用一至六个字节，最大能编码 31 位字符。最新的 UTF-8 规范(utf8mb4)只使用一到四个字节，最大能编码21位，正好能够表示所有的 17个 Unicode 平面)。</li>
+<li>新建mysql库或者表的时候还有一个排序规则。<code>utf8_unicode_ci</code> 比较准确，<code>utf8_general_ci</code> 速度比较快。通常情况下 <code>utf8_general_ci</code> 的准确性就够我们用的了，在我看过很多程序源码后，发现它们大多数也用的是 <code>utf8_general_ci</code>，所以新建数据 库时一般选用<code>utf8_general_ci</code> 就可以了。</li>
+</ul>
+<p>参考资料:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql">How To Create a New User and Grant Permissions in MySQL</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/06/ThreadLocal%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8-threadlocal%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/" rel="prev" title="ThreadLocal的原理与应用">
+                  <i class="fa fa-chevron-left"></i> ThreadLocal的原理与应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/06/JAVA%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84-java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84/" rel="next" title="JAVA面试题组">
+                  JAVA面试题组 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

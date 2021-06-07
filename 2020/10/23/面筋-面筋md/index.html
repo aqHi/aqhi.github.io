@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="[TOC]##线程相关 Thread start() : 启动线程 run() : 通过start()之后，cpu获得了线程执行时间，去调用run(); sleep() : 线程等待指定时间，释放cpu资源，不释放锁 yield() : 释放当前cpu资源，线程回到就绪状态， 不释放锁，让相同优先级线程执行 join() : 保持当前线程在其他线程结束时才能执行 interrupt() : 中断线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面筋">
+<meta property="og:url" content="https://aqhi.net/2020/10/23/%E9%9D%A2%E7%AD%8B-%E9%9D%A2%E7%AD%8Bmd/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="[TOC]##线程相关 Thread start() : 启动线程 run() : 通过start()之后，cpu获得了线程执行时间，去调用run(); sleep() : 线程等待指定时间，释放cpu资源，不释放锁 yield() : 释放当前cpu资源，线程回到就绪状态， 不释放锁，让相同优先级线程执行 join() : 保持当前线程在其他线程结束时才能执行 interrupt() : 中断线">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-23T08:02:35.336Z">
+<meta property="article:modified_time" content="2020-10-23T10:04:11.274Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://aqhi.net/2020/10/23/%E9%9D%A2%E7%AD%8B-%E9%9D%A2%E7%AD%8Bmd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2020&#x2F;10&#x2F;23&#x2F;%E9%9D%A2%E7%AD%8B-%E9%9D%A2%E7%AD%8Bmd&#x2F;&quot;,&quot;path&quot;:&quot;2020&#x2F;10&#x2F;23&#x2F;面筋-面筋md&#x2F;&quot;,&quot;title&quot;:&quot;面筋&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>面筋 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread"><span class="nav-number">1.</span> <span class="nav-text">Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">线程的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">3.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%88%9B%E5%BB%BA%E6%96%B9%E5%BC%8F-5%E7%A7%8D"><span class="nav-number">3.0.1.</span> <span class="nav-text">线程池的创建方式:5种</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">3.0.2.</span> <span class="nav-text">线程池的状态</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Callable-%E5%92%8C-FutureTask"><span class="nav-number">4.</span> <span class="nav-text">Callable 和 FutureTask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98%EF%BC%9A-%E9%99%90%E5%88%B6%E8%AE%BF%E9%97%AE%E9%A2%91%E7%8E%87%EF%BC%8C%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4%E5%BE%80%E5%89%8D%E6%8E%A85%E5%88%86%E9%92%9F%E7%9A%84%E6%AC%A1%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">面试题： 限制访问频率，当前时间往前推5分钟的次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">6.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8EHashTable%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.1.</span> <span class="nav-text">与HashTable的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#db%E7%9B%B8%E5%85%B3"><span class="nav-number"></span> <span class="nav-text">db相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql"><span class="nav-number">1.</span> <span class="nav-text">mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">mysql数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">1.2.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E4%B8%8E%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">1.3.</span> <span class="nav-text">聚簇索引与非聚簇索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="nav-number">1.4.</span> <span class="nav-text">索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%B7%A6%E5%8E%9F%E5%88%99"><span class="nav-number">1.5.</span> <span class="nav-text">最左原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">Mysql的执行过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NOW%EF%BC%88%EF%BC%89%E5%92%8C-CURRENT-DATE%EF%BC%88%EF%BC%89%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.7.</span> <span class="nav-text">NOW（）和 CURRENT_DATE（）有什么区别？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis"><span class="nav-number">2.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redis%E4%B8%BA%E4%BB%80%E4%B9%88%E9%82%A3%E4%B9%88%E5%BF%AB"><span class="nav-number">2.1.</span> <span class="nav-text">redis为什么那么快</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0"><span class="nav-number">2.2.</span> <span class="nav-text">缓存淘汰</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC"><span class="nav-number">4.</span> <span class="nav-text">GC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GC-ROOT-%E6%A0%88%E5%BC%95%E7%94%A8%EF%BC%8C%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%EF%BC%8CJNI%E5%BC%95%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">GC ROOT:栈引用，常量池，静态变量，JNI引用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring"><span class="nav-number"></span> <span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IOC-%E5%92%8C-DI"><span class="nav-number">1.</span> <span class="nav-text">IOC 和 DI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">2.</span> <span class="nav-text">Spring bean的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">Spring 循环依赖的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP"><span class="nav-number">4.</span> <span class="nav-text">AOP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AOP%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">AOP的原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-boot"><span class="nav-number"></span> <span class="nav-text">Spring boot</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">简化配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud"><span class="nav-number"></span> <span class="nav-text">Spring Cloud</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Eureka"><span class="nav-number">1.</span> <span class="nav-text">Eureka</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">多级缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E5%88%97%E8%A1%A8%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A%E5%8F%8C%E5%B1%82map"><span class="nav-number">1.2.</span> <span class="nav-text">注册列表的原理：双层map</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8Fid"><span class="nav-number"></span> <span class="nav-text">分布式id</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">雪花算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number"></span> <span class="nav-text">类加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">双亲委派加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP"><span class="nav-number"></span> <span class="nav-text">CAP</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2020/10/23/%E9%9D%A2%E7%AD%8B-%E9%9D%A2%E7%AD%8Bmd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面筋
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-23 16:02:35 / 修改时间：18:04:11" itemprop="dateCreated datePublished" datetime="2020-10-23T16:02:35+08:00">2020-10-23</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]<br>##线程相关</p>
+<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><ol>
+<li>start() : 启动线程</li>
+<li>run() : 通过start()之后，cpu获得了线程执行时间，去调用run();</li>
+<li>sleep() : 线程等待指定时间，释放cpu资源，不释放锁</li>
+<li>yield() : 释放当前cpu资源，线程回到就绪状态， 不释放锁，让相同优先级线程执行</li>
+<li>join() : 保持当前线程在其他线程结束时才能执行</li>
+<li>interrupt() : 中断线程</li>
+<li>wait()：从object()继承来，进入等待池，释放锁</li>
+<li>notify()：从object()继承来，唤醒一个线程</li>
+</ol>
+<h3 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h3><ul>
+<li><p>新建：使用new关键字或者使用Thread类或者其子类创建线程，线程会保持新建状态，直到程序start()这个线程</p>
+</li>
+<li><p>就绪：当线程执行start()方法后，线程进入就绪状态并在等待队列中等待调度</p>
+</li>
+<li><p>运行：就绪的线程获取cpu资源之后，就会调用run()方法，线程进入运行状态。它可以变成就绪、阻塞、死亡状态</p>
+</li>
+<li><p>阻塞：</p>
+<ul>
+<li>等待阻塞：运行时执行了wait()方法，使线程进入等待阻塞状态</li>
+<li>同步阻塞：线程获取锁失败时进入同步阻塞</li>
+<li>其他阻塞：通过执行sleep()或join()发出IO请求时</li>
+</ul>
+</li>
+<li><p>死亡：一个运行状态的线程完成任务或者其他终止条件发生时，该线程就切换到终止状态</p>
+</li>
+</ul>
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><h5 id="线程池的创建方式-5种"><a href="#线程池的创建方式-5种" class="headerlink" title="线程池的创建方式:5种"></a>线程池的创建方式:5种</h5><h5 id="线程池的状态"><a href="#线程池的状态" class="headerlink" title="线程池的状态"></a>线程池的状态</h5><p><strong>设置线程池：</strong>跟cpu核心数，阻塞系数，io时间有关</p>
+<p><strong>公式</strong>：启动线程数 = 【任务执行时间/(任务执行时间-IO等待时间)】*CPU内核数</p>
+<p>最佳线程数量 = CPU执行核心数/（1-阻塞系数）</p>
+<p>阻塞系数 = 阻塞时间／（阻塞时间+使用CPU的时间）</p>
+<ol>
+<li>线程池参数：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 TimeUnit unit,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">               maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">               maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">               keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">           <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</span><br><span class="line">               <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">           <span class="keyword">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">           <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">           <span class="keyword">this</span>.workQueue = workQueue;</span><br><span class="line">           <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">           <span class="keyword">this</span>.threadFactory = threadFactory;</span><br><span class="line">           <span class="keyword">this</span>.handler = handler;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>corePoolSize: 核心线程数：线程会维护一个最小核心线程数，即使线程处于闲置状态，也不会被销毁，除非设置allowCoreThreadTimeOut。如果当前线程数小于核心线程数，则会创建新的线程来执行任务。</li>
+<li>maximumPoolSize：线程池最大线程数量：线程未达到最大线程数量，工作队列没有满，则会等到工作队列满，创建新的线程去执行队列任务，如果线程达到最大线程数，并且队列已满，会抛出异常。</li>
+<li>keepAliveTime：线程空闲时间：允许线程闲置的最大空闲时间，如果超过这个时间会被销毁。</li>
+<li>unit：keepAliveTime的时间单位。</li>
+<li>workQueue：工作队列。</li>
+<li>threadFactory：创建这个线程使用的工厂，可以用来设置线程名称，是否是守护线程等。</li>
+<li>handler：当工作队列满了并且最大线程达到上限，拒绝后续任务的策略。</li>
+</ul>
+<h3 id="Callable-和-FutureTask"><a href="#Callable-和-FutureTask" class="headerlink" title="Callable 和 FutureTask"></a>Callable 和 FutureTask</h3><p>实现callable接口创建线程的方式，可以配合future获取线程的返回值，以及是否执行完成等信息。</p>
+<ul>
+<li>FutureTask提供的get(): 该方法能够获取线程的返回值，如果给定时间无法获取结果，会抛出TimeoutException异常</li>
+<li>FutureTask提供的isDone(): 该方法能够判断该线程是否执行完成</li>
+</ul>
+<h3 id="面试题：-限制访问频率，当前时间往前推5分钟的次数"><a href="#面试题：-限制访问频率，当前时间往前推5分钟的次数" class="headerlink" title="面试题： 限制访问频率，当前时间往前推5分钟的次数"></a>面试题： 限制访问频率，当前时间往前推5分钟的次数</h3><h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><ol>
+<li>初始化map通过cas操作</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Node&lt;K,V&gt;[] initTable() &#123;</span><br><span class="line">        Node&lt;K,V&gt;[] tab; <span class="keyword">int</span> sc;</span><br><span class="line">        <span class="keyword">while</span> ((tab = table) == <span class="keyword">null</span> || tab.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((sc = sizeCtl) &lt; <span class="number">0</span>)</span><br><span class="line">                Thread.yield(); <span class="comment">// lost initialization race; just spin</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (U.compareAndSwapInt(<span class="keyword">this</span>, SIZECTL, sc, -<span class="number">1</span>)) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || tab.length == <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="keyword">int</span> n = (sc &gt; <span class="number">0</span>) ? sc : DEFAULT_CAPACITY;</span><br><span class="line">                        <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">                        Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node&lt;?,?&gt;[n];</span><br><span class="line">                        table = tab = nt;</span><br><span class="line">                        sc = n - (n &gt;&gt;&gt; <span class="number">2</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    sizeCtl = sc;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> tab;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+<ol start="2">
+<li><p>put操作对节点上锁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (f) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tabAt(tab, i) == f) &#123;</span><br><span class="line">        <span class="keyword">if</span> (fh &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            binCount = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> (ConcurrentHashMap.Node&lt;K,V&gt; e = f;; ++binCount) &#123;</span><br><span class="line">                K ek;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                        ((ek = e.key) == key ||</span><br><span class="line">                                (ek != <span class="keyword">null</span> &amp;&amp; key.equals(ek)))) &#123;</span><br><span class="line">                    oldVal = e.val;</span><br><span class="line">                    <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                        e.val = value;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                ConcurrentHashMap.Node&lt;K,V&gt; pred = e;</span><br><span class="line">                <span class="keyword">if</span> ((e = e.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    pred.next = <span class="keyword">new</span> ConcurrentHashMap.Node&lt;K,V&gt;(hash, key,</span><br><span class="line">                            value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (f <span class="keyword">instanceof</span> ConcurrentHashMap.TreeBin) &#123;</span><br><span class="line">            ConcurrentHashMap.Node&lt;K,V&gt; p;</span><br><span class="line">            binCount = <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> ((p = ((ConcurrentHashMap.TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,</span><br><span class="line">                    value)) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                oldVal = p.val;</span><br><span class="line">                <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                    p.val = value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>当map扩容时，调度其他所有线程帮助扩容数据迁移，每个线程领取大小为6的节点进行数据迁移</p>
+</li>
+</ol>
+<h4 id="与HashTable的区别"><a href="#与HashTable的区别" class="headerlink" title="与HashTable的区别"></a>与HashTable的区别</h4><p>ConcurrentHashMap采用的是分段锁，对不同节点的数据不会有影响，是并行化操作。HashTable是在每个操作方法上都加上synchronized是串行操作，效率低。</p>
+<h2 id="db相关"><a href="#db相关" class="headerlink" title="db相关"></a>db相关</h2><h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><ol>
+<li>ACID:<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(1)  原子性：以单个事务为最小单元，要么全部成功，要么全部失败</span><br><span class="line">(2)  一致性：事务总是从一个一致性状态转向另一个一致性状态</span><br><span class="line">(3)  隔离性：一个事物在提交前，对其他事物是不可见的</span><br><span class="line">	a.读已提交：事物可以读取未提交的数据。</span><br><span class="line">	b.读已提交：一个事物在提交前所做任何操作对其他事物不可见。</span><br><span class="line">	c.可重复读：同一个事务读取的结果是一致的。</span><br><span class="line">		(select 通过读取事物id小于等于当前事务id，如果大于，去undolog查询快	照信息解决不可重复读，update上锁,会更新版本号，属于当前读。可能会产生幻读，当一个事物提交前查询和这个事物提交后查询会出现幻读）</span><br><span class="line"> 	d.可串行化：强制事务串行化。</span><br><span class="line"> 	</span><br><span class="line"> 	a.脏读：读取到其他事务未提交的操作结果</span><br><span class="line">		b.不可重复读：多次读取结果不一致</span><br><span class="line">		c.幻读：两次查询，第二次查询的结果出现了包括第一次查询所没有的结果</span><br><span class="line">	(4) 持久性： 持久化</span><br></pre></td></tr></table></figure></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">隔离级别</th>
+<th align="center">脏读</th>
+<th align="center">不可重复读</th>
+<th align="center">幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">RU</td>
+<td align="center">y</td>
+<td align="center">y</td>
+<td align="center">y</td>
+</tr>
+<tr>
+<td align="center">RC</td>
+<td align="center">n</td>
+<td align="center">y</td>
+<td align="center">y</td>
+</tr>
+<tr>
+<td align="center">RR</td>
+<td align="center">n</td>
+<td align="center">n</td>
+<td align="center">y</td>
+</tr>
+<tr>
+<td align="center">serial</td>
+<td align="center">n</td>
+<td align="center">n</td>
+<td align="center">n</td>
+</tr>
+</tbody></table>
+<h4 id="mysql数据类型"><a href="#mysql数据类型" class="headerlink" title="mysql数据类型"></a>mysql数据类型</h4><ul>
+<li>整数类型：tinyint,  smallint,mdeiumint, int, bigint，整数类型有unsigned属性，不允许为负值</li>
+<li>实数类型：</li>
+<li>字符串类型：<ul>
+<li>Char: 类型是定长的，根据定义的字符串长度来分配空间，在存储char值时，mysql会删除末尾的空格，char适合存储很短或者定长的数据</li>
+<li>Varchar: 用于存储可变长字符串，是最常见的字符串数据类型。它比定长类型更节省空间，因为它仅使用必要的空间（越短的字符串使用越少的空间）</li>
+</ul>
+</li>
+</ul>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><p>普通索引，主键索引，唯一索引，联合索引</p>
+<h4 id="聚簇索引与非聚簇索引"><a href="#聚簇索引与非聚簇索引" class="headerlink" title="聚簇索引与非聚簇索引"></a>聚簇索引与非聚簇索引</h4><p>聚簇索引（二级索引）：索引结构与数据文件在一块，例如主键索引就是聚簇索引，叶子节点的主键值下是整行数据。</p>
+<p>非聚簇索引（一级索引）：索引结构与数据文件分开，例如联合索引，叶子结点下是该索引值的行对应的主键id,</p>
+<p>通过非聚簇索引查询会通过主键索引得到数据，这个过程称作为回表。</p>
+<p>一个表只能有1个聚簇索引，因为聚簇索引的顺序就是物理数据的顺序，所以一个表只能有一个聚簇索引</p>
+<h4 id="索引失效"><a href="#索引失效" class="headerlink" title="索引失效"></a>索引失效</h4><ul>
+<li>最左原则</li>
+<li>使用or可能索引失效</li>
+<li>使用like查询，%在前缀（类似最左原则）</li>
+<li>字段类型转换可能会导致失效，例如：字符串不加引号会导致索引失效</li>
+<li>对索引字段进行条件操作</li>
+<li>is null 和is not null在mysql在查询成本非常高时会不走索引</li>
+</ul>
+<h4 id="最左原则"><a href="#最左原则" class="headerlink" title="最左原则"></a>最左原则</h4><p>Mysql会从按照从左到右进行匹配，直到遇到范围查询</p>
+<h4 id="Mysql的执行过程"><a href="#Mysql的执行过程" class="headerlink" title="Mysql的执行过程"></a>Mysql的执行过程</h4><p>查询过程：先去查缓存，若直接命中缓存，则返回数据（这条链路前提的缓存开启），若没命中缓存，则由server端进行SQL解析，预处理，再优化，最后根据优化器生成的执行计划，调用存储引擎的api去查询数据，最后返回</p>
+<p>修改过程：先去查数据，查询到数据之后执行器执行操作，形成新的一行数据，再调用存储引擎的api将数据更新到内存当中，存储引擎（innoDB）去写redo log，undo log，此时状态标记成perpare，并告诉执行器可随时提交，执行器写bin log，写完后将状态改成commit提交事务。</p>
+<h4 id="NOW（）和-CURRENT-DATE（）有什么区别？"><a href="#NOW（）和-CURRENT-DATE（）有什么区别？" class="headerlink" title="NOW（）和 CURRENT_DATE（）有什么区别？"></a>NOW（）和 CURRENT_DATE（）有什么区别？</h4><p>now(): 返回的是当前的日期，有年月日时分秒</p>
+<p>Current_date(): 返回的是当前的日期，只有年月日</p>
+<h3 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h3><h4 id="redis为什么那么快"><a href="#redis为什么那么快" class="headerlink" title="redis为什么那么快"></a>redis为什么那么快</h4><p>redis虽然是单线程工作，但是性能瓶颈在io，抛去io性能瓶颈，单线程省去了线程上下文切换、线程锁抢占等问题，cpu利用率比多线程高，redis数据结构简单，数据存储在内存当中，查询效率高。在redis 6.x版本中，采用多个io线程，单个work线程的模型，从io瓶颈问题上提升redis的效率</p>
+<h4 id="缓存淘汰"><a href="#缓存淘汰" class="headerlink" title="缓存淘汰"></a>缓存淘汰</h4><p>当redis内存超出物理内存限制时，内存的数据会和磁盘数据产生频繁的交换，会让redis性能急剧下降。对于访问频繁的redis来说，这样的存取效率基本上等于不可用，为了限制最大使用内存，redis提供了一些缓存淘汰方案:</p>
+<ul>
+<li><p>Noeviction：默认的淘汰策略，不会继续处理写请求。</p>
+</li>
+<li><p>Volatile-lru:  尝试淘汰设置了过期时间的key，使用最少的key优先被淘汰。没有设置过期时间的key不会被淘汰，这样可以保证需要持久化的数据不会被淘汰</p>
+</li>
+<li><p>Volatile-til：尝试淘汰设置了过期时间的key，key的剩余寿命越小优先被淘汰</p>
+</li>
+<li><p>Volatile-random: 随机淘汰设置了过期时间的key</p>
+</li>
+<li><p>Allkeys-lru: 使用最少的key会被优先淘汰</p>
+</li>
+<li><p>allkeys-random: 随机淘汰key</p>
+</li>
+</ul>
+<p>##JVM相关</p>
+<h3 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h3><ul>
+<li>方法区：<ul>
+<li>常量池：</li>
+</ul>
+</li>
+<li>堆：</li>
+<li>虚拟机栈：</li>
+<li>本地方法栈：</li>
+<li>计数器</li>
+</ul>
+<ol>
+<li>String 是final类型，不可变，不可继承，被赋予新值的过程是创建同样的一个对象，将新对象赋值，旧对象GC回收</li>
+</ol>
+<h3 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h3><h4 id="GC-ROOT-栈引用，常量池，静态变量，JNI引用"><a href="#GC-ROOT-栈引用，常量池，静态变量，JNI引用" class="headerlink" title="GC ROOT:栈引用，常量池，静态变量，JNI引用"></a>GC ROOT:栈引用，常量池，静态变量，JNI引用</h4><h2 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h2><h3 id="IOC-和-DI"><a href="#IOC-和-DI" class="headerlink" title="IOC 和 DI"></a>IOC 和 DI</h3><p>IOC是控制反转：应用本身不负责对象的创建与维护，创建与维护的工作交给spring容器去进行管理</p>
+<p>DI依赖注入：程序在运行期间，由外部容器，动态的将依赖对象注入到容器当中，可以提升组件重用的频率</p>
+<h3 id="Spring-bean的生命周期"><a href="#Spring-bean的生命周期" class="headerlink" title="Spring bean的生命周期"></a>Spring bean的生命周期</h3><p>spring的生命周期有4个阶段，其中每个阶段会穿插扩展点</p>
+<ul>
+<li><p>实例化 createBeanInstance()</p>
+<ul>
+<li>InstantiationAwareBeanPostProcessor：作用于实例化的前后</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">InstantiationAwareBeanPostProcessor extends BeanPostProcessor</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>属性赋值 populateBean()</p>
+</li>
+<li><p>初始化 Initialization</p>
+<ul>
+<li>BeanPostProcessor:作用于初始化的前后</li>
+<li>在初始化之前调用Aware接口</li>
+</ul>
+</li>
+<li><p>销毁 Destruction</p>
+</li>
+</ul>
+<h3 id="Spring-循环依赖的问题"><a href="#Spring-循环依赖的问题" class="headerlink" title="Spring 循环依赖的问题"></a>Spring 循环依赖的问题</h3><p>一个对象的创建过程分为两步：</p>
+<figure class="highlight plaintext"><figcaption><span>wiki</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 实例化对象</span><br><span class="line">2. 实例化对象属性</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Spring 实例化bean的时候是分两步进行，先实例化目标bean，再去注入属性</li>
+<li>Spring 通过递归的方式获取目标bean以及目标属性</li>
+</ul>
+<p>例如：A拥有B成员变量属性，B拥有A成员变量属性，在实例化A的时候，Spring会先从Spring容器中获取A的实例，如果没有，实例化A，将A放入Spring容器当中（此时A还没有实例化属性）。然后Spring会去实例化A的属性，当从Spring容器中获取B实例，没有时就会实例化B，并放入容器当中，再实例化B的属性，B的属性为A，会从容器中取出A设置到B的属性上。成功实例化B之后，再将B设置到A上。整个过程就完成了，解决了循环依赖问题。</p>
+<h3 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h3><h4 id="AOP的原理"><a href="#AOP的原理" class="headerlink" title="AOP的原理"></a>AOP的原理</h4><p>aop使用动态代理实现，在spring bean初始化的的阶段通过BeanPostProcessor方法使用动态代理在内存中临时生成一个aop对象增强存储在spring容器当中，该aop对象拥有对象的所有方法。</p>
+<p>aop的动态代理使用JDK动态代理和CGLib动态代理来实现的。</p>
+<p>JDK动态代理通过反射实现代理，需要实现一个接口InvocationHandler</p>
+<p>CGLib通过字节码来实现代理，CGLib是通过继承来实现代理，如果某个类被声明称final,将不会被代理。AOP代理如果没有实现接口，将默认会使用CGLib进行代理</p>
+<h2 id="Spring-boot"><a href="#Spring-boot" class="headerlink" title="Spring boot"></a>Spring boot</h2><p><strong>优点</strong></p>
+<ol>
+<li>内嵌tomcat，可独立部署jar包</li>
+<li>简化配置，可自动装配</li>
+</ol>
+<p><strong>缺点</strong></p>
+<ol>
+<li>集成度过高，难以理解源码</li>
+</ol>
+<h3 id="简化配置"><a href="#简化配置" class="headerlink" title="简化配置"></a>简化配置</h3><p>spring加载：spring 会在初始化的时候加载META-INF下的spring.factory文件获取资源，然后通过properties加载资源</p>
+<p>Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作。以前我们需要自己配置的东西，自动配置类都帮我们完成了。</p>
+<h2 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud"></a>Spring Cloud</h2><h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><ol>
+<li><p>服务注册：服务提供者将自身注册到服务中心</p>
+</li>
+<li><p>服务续约：eureka将每30s请求一次心跳，来进行续约，若90s无续约将会删除服务信息</p>
+</li>
+<li><p>服务剔除：当个别节点90s内无心跳，将会将该服务注册列表删除</p>
+</li>
+<li><p>服务下线：程序在关闭时会向注册中心发送请求，eureka收到请求后会将注册信息删除</p>
+</li>
+<li><p>自我保护：当出现大批量心跳失败时，15分钟内心跳成功率在85%以内，将会进入自我保护机制</p>
+<p>1）eureka不再从注册列表移除长时间没收到心跳的服务信息</p>
+<p>2）eureka仍然会接受新服务的注册和查询的请求，但是不回被同步到其他节点上（保证当前节点依然可用）</p>
+<p>3）当网络稳定时，当前实例新的注册信息会被同步到其他节点中</p>
+</li>
+<li><p>Eureka分区：eureka提供了Region和Zone两个概念进行分区，用一个区的请求会优先调用本区的请求</p>
+<p>1）Region: 可以理解成地理区域</p>
+<ol start="2">
+<li>  Zone: 可以理解成机房区域</li>
+</ol>
+</li>
+</ol>
+<h4 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h4><p>拉取注册信息时，判断是否开启了多级缓存，如果开启了从只读缓存取数据，如果没开启，从读写缓存取。默认每30s从读写缓存同步信息到只读缓存，每60s清空超过90s未续约的节点，服务每30s从注册中心拉取一次注册信息。</p>
+<ol>
+<li>只读缓存(ConcurrentMap)：如果只读缓存为空再去查询读写缓存</li>
+<li>读写缓存(Guava)：定时30s将信息同步到只读缓存,如果还是没有数据从registry取</li>
+<li>Registry(ConcurrentMap)：异步同步多节点注册信息，当节点信息失效，将会清空二级缓存信息并同步更新二级缓存</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Get the payload in both compressed and uncompressed form.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@VisibleForTesting</span></span><br><span class="line">   <span class="function">Value <span class="title">getValue</span><span class="params">(<span class="keyword">final</span> Key key, <span class="keyword">boolean</span> useReadOnlyCache)</span> </span>&#123;</span><br><span class="line">       Value payload = <span class="keyword">null</span>;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="keyword">if</span> (useReadOnlyCache) &#123;</span><br><span class="line">               <span class="keyword">final</span> Value currentPayload = readOnlyCacheMap.get(key);</span><br><span class="line">               <span class="keyword">if</span> (currentPayload != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   payload = currentPayload;</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   payload = readWriteCacheMap.get(key);</span><br><span class="line">                   readOnlyCacheMap.put(key, payload);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               payload = readWriteCacheMap.get(key);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">           logger.error(<span class="string">&quot;Cannot get value for key : &#123;&#125;&quot;</span>, key, t);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> payload;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="注册列表的原理：双层map"><a href="#注册列表的原理：双层map" class="headerlink" title="注册列表的原理：双层map"></a>注册列表的原理：双层map</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//外层的key是服务名称，里层key是实例名称，Lease&lt;InstanceInfo&gt;服务信息</span></span><br><span class="line">ConcurrentHashMap&lt;String, Map&lt;String, Lease&lt;InstanceInfo&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="分布式id"><a href="#分布式id" class="headerlink" title="分布式id"></a>分布式id</h2><h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p>雪花算法:由首位无效符 + 时间戳（毫秒）+ 机器号 + 序列号</p>
+<p>优点：</p>
+<ol>
+<li>高性能高可用：在内存中生成，不依赖数据库<ol start="2">
+<li>容量大：每秒能生成几百万个id</li>
+<li>id自增：由于引入时间戳，id自增，作为mysql索引能增加查询效率</li>
+</ol>
+</li>
+</ol>
+<p>缺点：依赖于时间一致性，如果时间回调，将会产生重复id</p>
+<h2 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h2><h3 id="双亲委派加载"><a href="#双亲委派加载" class="headerlink" title="双亲委派加载"></a>双亲委派加载</h3><p>BootStrapClassLoad(启动类加载器): 加载核心类库</p>
+<p>ExtensionClassLoad(标准扩展器加载器): 加载扩展类</p>
+<p>ApplicationClassLoad(应用程序类加载器): 加载当前应用classPatch下所有目录</p>
+<p>CustomClassLoader(用户自定义加载器): </p>
+<p>好处：</p>
+<ol>
+<li>可避免重复加载，如果父类已经加载，子类不需要重新加载</li>
+<li>更安全，很好的解决了加载器加载基础类的统一问题，核心类不由用户去自定义加载</li>
+</ol>
+<h2 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h2><p>一致性，可用性，容错性</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/23/Docker%20%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98-docker%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%88%98/" rel="prev" title="Docker 生产环境配置实战">
+                  <i class="fa fa-chevron-left"></i> Docker 生产环境配置实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/07/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91Spring%20%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6--bi-ji--s-p-r-i-n-g--shi-wu-chuan-bo-ji-zhi/" rel="next" title="【笔记】Spring 事务传播机制">
+                  【笔记】Spring 事务传播机制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

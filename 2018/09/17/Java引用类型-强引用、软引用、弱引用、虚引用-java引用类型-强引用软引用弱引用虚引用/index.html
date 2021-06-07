@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Java中，我们不需要手动管理对象的生命周期，但是如果希望对象具备一定的生命周期的话，就必须合理运用Java中的不同引用类型。从Java SE2起，就为提供了四种引用类型：强引用、软引用、弱引用和虚引用。本文通过分析他们在JDK中的使用场景来阐述不同引用类型在实际中的作用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java引用类型-强引用、软引用、弱引用、虚引用">
+<meta property="og:url" content="https://aqhi.net/2018/09/17/Java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8-java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="Java中，我们不需要手动管理对象的生命周期，但是如果希望对象具备一定的生命周期的话，就必须合理运用Java中的不同引用类型。从Java SE2起，就为提供了四种引用类型：强引用、软引用、弱引用和虚引用。本文通过分析他们在JDK中的使用场景来阐述不同引用类型在实际中的作用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-17T03:12:10.000Z">
+<meta property="article:modified_time" content="2020-10-23T08:02:41.940Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://aqhi.net/2018/09/17/Java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8-java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2018&#x2F;09&#x2F;17&#x2F;Java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8-java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8&#x2F;&quot;,&quot;path&quot;:&quot;2018&#x2F;09&#x2F;17&#x2F;Java引用类型-强引用、软引用、弱引用、虚引用-java引用类型-强引用软引用弱引用虚引用&#x2F;&quot;,&quot;title&quot;:&quot;Java引用类型-强引用、软引用、弱引用、虚引用&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Java引用类型-强引用、软引用、弱引用、虚引用 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8-StrongReference"><span class="nav-number">1.</span> <span class="nav-text">强引用(StrongReference)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-amp-%E7%94%A8%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">概念&amp;用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E5%BC%95%E7%94%A8-SoftReference"><span class="nav-number">2.</span> <span class="nav-text">软引用(SoftReference)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-amp-amp-%E7%94%A8%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">概念&amp;&amp;用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7-1"><span class="nav-number">2.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8-1"><span class="nav-number">2.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8-WeakReference"><span class="nav-number">3.</span> <span class="nav-text">弱引用(WeakReference)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-amp-amp-%E7%94%A8%E6%B3%95-1"><span class="nav-number">3.1.</span> <span class="nav-text">概念&amp;&amp;用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7-2"><span class="nav-number">3.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8-2"><span class="nav-number">3.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%BC%95%E7%94%A8-PhantomReference"><span class="nav-number">4.</span> <span class="nav-text">虚引用(PhantomReference)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5-amp-amp-%E7%94%A8%E6%B3%95-2"><span class="nav-number">4.1.</span> <span class="nav-text">概念&amp;&amp;用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7-3"><span class="nav-number">4.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8-3"><span class="nav-number">4.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2018/09/17/Java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8-java%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B-%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java引用类型-强引用、软引用、弱引用、虚引用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-09-17 11:12:10" itemprop="dateCreated datePublished" datetime="2018-09-17T11:12:10+08:00">2018-09-17</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-23 16:02:41" itemprop="dateModified" datetime="2020-10-23T16:02:41+08:00">2020-10-23</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>Java中，我们不需要手动管理对象的生命周期，但是如果希望对象具备一定的生命周期的话，就必须合理运用Java中的不同引用类型。从Java SE2起，就为提供了四种引用类型：<em><strong>强引用、软引用、弱引用和虚引用。</strong></em>本文通过分析他们在JDK中的使用场景来阐述不同引用类型在实际中的作用。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Java中提供这四种引用类型主要有两个目的：第一是可以让程序员通过代码的方式决定某些对象的生命周期；第二是有利于JVM进行垃圾回收。</p>
+<h3 id="强引用-StrongReference"><a href="#强引用-StrongReference" class="headerlink" title="强引用(StrongReference)"></a>强引用(StrongReference)</h3><h4 id="概念-amp-用法"><a href="#概念-amp-用法" class="headerlink" title="概念&amp;用法"></a>概念&amp;用法</h4><p>强引用就是指在程序代码之中普遍存在的对象，使用 <code>new</code> 创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><blockquote>
+<p>只要某个对象有强引用与之关联，<em><strong>JVM必定不会回收这个对象</strong></em>，即使在内存不足的情况下，JVM宁愿抛出 <code>OutOfMemoryError</code> 错误也不会回收这种对象。</p>
+</blockquote>
+<p>如果想强行中断强引用和某个对象的关联，可以显示的将引用赋值为null，这样Jvm会在合适的时间回收该对象。</p>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><blockquote>
+<p>JDK中的应用</p>
+</blockquote>
+<p>ArrayList 中删掉一个元素后，整体向前移动，最后一个位置需要置空回收。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    rangeCheck(index);</span><br><span class="line"></span><br><span class="line">    modCount++;</span><br><span class="line">    E oldValue = elementData(index);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> numMoved = size - index - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)</span><br><span class="line">        System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                         numMoved);</span><br><span class="line">    elementData[--size] = <span class="keyword">null</span>; <span class="comment">// clear to let GC do its work</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> oldValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="软引用-SoftReference"><a href="#软引用-SoftReference" class="headerlink" title="软引用(SoftReference)"></a>软引用(SoftReference)</h3><h4 id="概念-amp-amp-用法"><a href="#概念-amp-amp-用法" class="headerlink" title="概念&amp;&amp;用法"></a>概念&amp;&amp;用法</h4><p>用来描述一些还有用但是并非必须的对象，在Java中用java.lang.ref.SoftReference类来表示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br><span class="line">SoftReference&lt;Object&gt; sf = <span class="keyword">new</span> SoftReference&lt;Object&gt;(obj);</span><br><span class="line">obj = <span class="keyword">null</span>;  <span class="comment">// 使对象只被软引用关联</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h4><blockquote>
+<p>对于软引用关联着的对象，<em><strong>只有在内存不足的时候JVM才会回收该对象</strong></em>。这一点可以很好地用来解决OOM的问题，并且这个特性很适合用来实现缓存：比如网页缓存、图片缓存等。</p>
+</blockquote>
+<p>内存不足时等价于:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(内存不足)&#123;</span><br><span class="line">	obj = <span class="keyword">null</span> ;</span><br><span class="line">	System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过 <code>-XX:SoftRefLRUPolicyMSPerMB</code> 参数控制回收的时机。</p>
+<h4 id="应用-1"><a href="#应用-1" class="headerlink" title="应用"></a>应用</h4><blockquote>
+<p>浏览器网页缓存实例</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Browser bs= <span class="keyword">new</span> Browser();</span><br><span class="line">Optional&lt;SoftReference&gt; sf = Optional.of(<span class="keyword">new</span> SoftReference(bs));</span><br><span class="line"><span class="comment">// 没被回收直接获取</span></span><br><span class="line"><span class="comment">// 已被回收 重新创建</span></span><br><span class="line">sf.orElse(<span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Broswer())); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>JDK中的应用</p>
+</blockquote>
+<p>Java Class里面 <code>reflectionData</code> 方法获取反射数据的缓存，如果 <code>(rd = reflectionData.get()) != null</code> 说明有缓存，直接返回，否则重新创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> ReflectionData&lt;T&gt; <span class="title">reflectionData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    SoftReference&lt;ReflectionData&lt;T&gt;&gt; reflectionData = <span class="keyword">this</span>.reflectionData;</span><br><span class="line">    <span class="keyword">int</span> classRedefinedCount = <span class="keyword">this</span>.classRedefinedCount;</span><br><span class="line">    ReflectionData&lt;T&gt; rd;</span><br><span class="line">    <span class="keyword">if</span> (useCaches &amp;&amp;</span><br><span class="line">        reflectionData != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">        (rd = reflectionData.get()) != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">        rd.redefinedCount == classRedefinedCount) &#123;</span><br><span class="line">        <span class="keyword">return</span> rd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// else no SoftReference or cleared SoftReference or stale ReflectionData</span></span><br><span class="line">    <span class="comment">// -&gt; create and replace new instance</span></span><br><span class="line">    <span class="keyword">return</span> newReflectionData(reflectionData, classRedefinedCount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>与引用队列联合使用</p>
+</blockquote>
+<p>软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。</p>
+<h3 id="弱引用-WeakReference"><a href="#弱引用-WeakReference" class="headerlink" title="弱引用(WeakReference)"></a>弱引用(WeakReference)</h3><h4 id="概念-amp-amp-用法-1"><a href="#概念-amp-amp-用法-1" class="headerlink" title="概念&amp;&amp;用法"></a>概念&amp;&amp;用法</h4><p>弱引用与软引用的区别在于：只具有弱引用的对象拥有更短暂的生命周期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br><span class="line">WeakReference&lt;Object&gt; wf = <span class="keyword">new</span> WeakReference&lt;Object&gt;(obj);</span><br><span class="line">obj = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+
+<p>下面代码会让 <code>obj</code> 变成强引用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object newObject = wf.get();</span><br></pre></td></tr></table></figure>
+
+<h4 id="特性-2"><a href="#特性-2" class="headerlink" title="特性"></a>特性</h4><p>在垃圾回收器线程扫描它所管辖的内存区域的过程中，<em><strong>一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存</strong></em>。不过，由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。</p>
+<h4 id="应用-2"><a href="#应用-2" class="headerlink" title="应用"></a>应用</h4><p>如果这个对象是偶尔的使用，并且希望在使用时随时就能获取到，但又不想影响此对象的垃圾收集，那么你应该用 Weak Reference 来记住此对象。</p>
+<blockquote>
+<p>图像缓存</p>
+</blockquote>
+<p>假设我们要构建一个缓存，将大图像对象保存为值，将图像名称保存为键。我们想选择一个合适的Map实现来解决这个问题。</p>
+<p>使用简单的HashMap不是一个好的选择，因为值对象可能占用大量内存。更重要的是，即使它们不再在我们的应用程序中使用，它们也永远不会通过GC进程从缓存中回收。</p>
+<p>理想情况下，我们需要一个允许GC自动删除未使用对象的Map实现。当我们的应用程序中的任何地方没有使用大图像对象的键时，该对象将从内存中删除。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">WeakHashMap&lt;UniqueImageName, BigImage&gt; map = <span class="keyword">new</span> WeakHashMap&lt;&gt;();</span><br><span class="line">BigImage bigImage = <span class="keyword">new</span> BigImage(<span class="string">&quot;image_id&quot;</span>);</span><br><span class="line">UniqueImageName imageName = <span class="keyword">new</span> UniqueImageName(<span class="string">&quot;name_of_big_image&quot;</span>);</span><br><span class="line"> </span><br><span class="line">map.put(imageName, bigImage);</span><br><span class="line">assertTrue(map.containsKey(imageName));</span><br><span class="line"> </span><br><span class="line">imageName = <span class="keyword">null</span>;</span><br><span class="line">System.gc();</span><br><span class="line"> </span><br><span class="line">await().atMost(<span class="number">10</span>, TimeUnit.SECONDS).until(map::isEmpty);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>JDK中的应用</p>
+</blockquote>
+<ol>
+<li><code>WeakHashMap</code> 中的 <code>Entry</code> 继承了 <code>WeakReference</code> ，能自动清除未被使用的对象。其构造函数如下：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Entry(Object key, V value,</span><br><span class="line">      ReferenceQueue&lt;Object&gt; queue,</span><br><span class="line">      <span class="keyword">int</span> hash, Entry&lt;K,V&gt; next) &#123;</span><br><span class="line">    <span class="keyword">super</span>(key, queue);<span class="comment">// 调用构造函数，key为弱引用</span></span><br><span class="line">    <span class="keyword">this</span>.value = value;</span><br><span class="line">    <span class="keyword">this</span>.hash  = hash;</span><br><span class="line">    <span class="keyword">this</span>.next  = next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><code>ThreadLocal</code> 中 <code>ThreadLocalMap</code> 里的 <code>Entry</code> 同样也是继承了 <code>WeakReference</code> 。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="keyword">super</span>(k); <span class="comment">// 调用构造函数，k为弱引用</span></span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em><strong>二者的共同点都是<code>key</code>为弱引用，当其只有弱引用时，GC一定会对其进行回收，释放内存</strong></em>。</p>
+<h3 id="虚引用-PhantomReference"><a href="#虚引用-PhantomReference" class="headerlink" title="虚引用(PhantomReference)"></a>虚引用(PhantomReference)</h3><h4 id="概念-amp-amp-用法-2"><a href="#概念-amp-amp-用法-2" class="headerlink" title="概念&amp;&amp;用法"></a>概念&amp;&amp;用法</h4><p>“虚引用”顾名思义，就是形同虚设，与其他几种引用都不同，虚引用并不会决定对象的生命周期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br><span class="line">PhantomReference&lt;Object&gt; pf = <span class="keyword">new</span> PhantomReference&lt;Object&gt;(obj);</span><br><span class="line">obj = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="特性-3"><a href="#特性-3" class="headerlink" title="特性"></a>特性</h4><p>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收，它的 <code>get()</code> 方法永远返回 <code>null</code> 。</p>
+<h4 id="应用-3"><a href="#应用-3" class="headerlink" title="应用"></a>应用</h4><p><em><strong>虚引用主要用来跟踪对象被垃圾回收器回收的活动</strong></em>。虚引用与软引用和弱引用的一个区别在于：虚引用必须和引用队列 （ReferenceQueue）联合使用。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。PhantomReference 唯一的用处就是跟踪 referent  何时被 enqueue 到 ReferenceQueue 中。</p>
+<blockquote>
+<p>虚引用使用场景</p>
+</blockquote>
+<p>1、它允许你知道具体何时其引用的对象从内存中移除。<br>而实际上这是Java中唯一的方式。这一点尤其表现在处理类似图片的大文件的情况。当你确定一个图片数据对象应该被回收，你可以利用虚引用来判断这个对象回收之后在继续加载下一张图片。这样可以尽可能地避免可怕的内存溢出错误。</p>
+<p>2、虚引用可以避免很多析构时的问题。finalize 方法可以通过创建强引用指向快被销毁的对象来让这些对象重新复活。然而，一个重写了 finalize 方法的对象如果想要被回收掉，需要经历两个单独的垃圾收集周期。在第一个周期中，某个对象被标记为可回收，进而才能进行析构。</p>
+<p>但是因为在析构过程中仍有微弱的可能这个对象会重新复活。这种情况下，在这个对象真实销毁之前，垃圾回收器需要再次运行。因为析构可能并不是很及时，所以在调用对象的析构之前，需要经历数量不确定的垃圾收集周期。这就意味着在真正清理掉这个对象的时候可能发生很大的延迟。这就是为什么当大部分堆被标记成垃圾时还是会出现烦人的内存溢出错误。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>从 java 1.2 版本引入 <code>java.lang.ref</code> 包，共 4 种引用，这 4 种引用的级别高低依次为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">强引用 &gt; 软引用 &gt; 弱引用  &gt; 虚引用 </span><br></pre></td></tr></table></figure>
+
+
+<table>
+<thead>
+<tr>
+<th align="center">引用级别</th>
+<th align="center">GC</th>
+<th align="center">生存时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">强引用</td>
+<td align="center">从不</td>
+<td align="center">对象的一般状态，JVM停止运行时终止</td>
+</tr>
+<tr>
+<td align="center">软引用</td>
+<td align="center">内存不足时</td>
+<td align="center">JVM内存不足时</td>
+</tr>
+<tr>
+<td align="center">弱引用</td>
+<td align="center">垃圾回收时(只具有弱引用的对象)</td>
+<td align="center">下一次垃圾回收发生之前</td>
+</tr>
+<tr>
+<td align="center">虚引用</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<p>参考链接 : </p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/37401125/answer/226100181">Java中的强引用，软引用，弱引用，虚引用有什么用？</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.baeldung.com/java-weakhashmap">Guide to WeakHashMap in Java</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/09/07/%E6%94%B9%E5%96%84%E6%8E%A5%E5%8F%A3(Api)%E8%AE%BE%E8%AE%A1%20-%20Java%208%20%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95%EF%BC%88Default%20Method%EF%BC%89-%E6%94%B9%E5%96%84%E6%8E%A5%E5%8F%A3api%E8%AE%BE%E8%AE%A1-java8%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95defaultmethod/" rel="prev" title="改善接口(Api)设计 - Java 8 默认方法（Default Method）">
+                  <i class="fa fa-chevron-left"></i> 改善接口(Api)设计 - Java 8 默认方法（Default Method）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/06/%E7%90%86%E8%A7%A3%E9%98%BF%E9%87%8C%E4%BA%91mysql%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83-%E7%90%86%E8%A7%A3%E9%98%BF%E9%87%8C%E4%BA%91mysql%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" rel="next" title="理解阿里云mysql设计规范">
+                  理解阿里云mysql设计规范 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;aqhi.net&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="JAVA 基础JAVA中的几种基本数据类型是什么,各自占用多少字节?   类型 字节(byte) 位数(bit)    byte 1 8   boolean 1 8   char 2 16   short 2 16   int 4 32   float 4 32   long 8 64   double 8 64   String类能被继承吗,为什么? 不可以,因为String类有final修饰符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA面试题组">
+<meta property="og:url" content="https://aqhi.net/2019/10/06/JAVA%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84-java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84/index.html">
+<meta property="og:site_name" content="aqHi&#39;blog">
+<meta property="og:description" content="JAVA 基础JAVA中的几种基本数据类型是什么,各自占用多少字节?   类型 字节(byte) 位数(bit)    byte 1 8   boolean 1 8   char 2 16   short 2 16   int 4 32   float 4 32   long 8 64   double 8 64   String类能被继承吗,为什么? 不可以,因为String类有final修饰符">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-06T02:20:25.000Z">
+<meta property="article:modified_time" content="2021-02-01T11:16:09.312Z">
+<meta property="article:author" content="aqHi">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://aqhi.net/2019/10/06/JAVA%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84-java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;aqhi.net&#x2F;2019&#x2F;10&#x2F;06&#x2F;JAVA%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84-java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;10&#x2F;06&#x2F;JAVA面试题组-java面试题组&#x2F;&quot;,&quot;title&quot;:&quot;JAVA面试题组&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>JAVA面试题组 | aqHi'blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">aqHi'blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">艾琴海的博客</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JAVA-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">JAVA 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA%E4%B8%AD%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%98%AF%E4%BB%80%E4%B9%88-%E5%90%84%E8%87%AA%E5%8D%A0%E7%94%A8%E5%A4%9A%E5%B0%91%E5%AD%97%E8%8A%82"><span class="nav-number">1.1.</span> <span class="nav-text">JAVA中的几种基本数据类型是什么,各自占用多少字节?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E7%B1%BB%E8%83%BD%E8%A2%AB%E7%BB%A7%E6%89%BF%E5%90%97-%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">String类能被继承吗,为什么?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-Stringbuffer-StringBuilder%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">String, Stringbuffer, StringBuilder的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#13-ClassLoader-%E5%8E%9F%E7%90%86%E3%80%81%E5%88%86%E7%B1%BB%E3%80%81%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F-%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE-%E5%8A%A0%E5%88%86%E9%A1%B9"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">13.ClassLoader 原理、分类、加载顺序,双亲委派(加分项)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.0.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.0.1.2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.3.0.1.3.</span> <span class="nav-text">双亲委派模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%9D%E5%A4%96"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">额外</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E3%80%81%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">计算机基础、操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">2.0.1.</span> <span class="nav-text">死锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%BB%E9%94%81%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">死锁的四个条件</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MYSQL"><span class="nav-number">3.</span> <span class="nav-text">MYSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySql%E7%B4%A2%E5%BC%95%E5%AE%9A%E4%B9%89%E3%80%81%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E3%80%81%E6%9C%80%E5%B7%A6%E5%8C%B9%E9%85%8D%E7%9A%84%E8%80%83%E6%9F%A5%E3%80%82"><span class="nav-number">3.0.1.</span> <span class="nav-text">MySql索引定义、如何设计、最左匹配的考查。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81%E3%80%82"><span class="nav-number">3.0.2.</span> <span class="nav-text">Mysql悲观锁和乐观锁。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySql%E7%9A%84%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E7%9A%84-MVCC-%E9%97%B4%E9%9A%99%E9%94%81%E3%80%82"><span class="nav-number">3.0.3.</span> <span class="nav-text">MySql的事务隔离级别,如何实现可重复读的,MVCC,间隙锁。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84ACID%E3%80%81BASE%E5%8E%9F%E7%90%86%E3%80%81CAP%E5%8E%9F%E5%88%99%E3%80%82"><span class="nav-number">3.0.4.</span> <span class="nav-text">事务的ACID、BASE原理、CAP原则。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID"><span class="nav-number">3.0.4.1.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CAP%E5%8E%9F%E5%88%99-%E5%AE%9A%E7%90%86"><span class="nav-number">3.0.4.2.</span> <span class="nav-text">CAP原则(定理)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BASE%E7%90%86%E8%AE%BA"><span class="nav-number">3.0.4.3.</span> <span class="nav-text">BASE理论</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">3.0.5.</span> <span class="nav-text">分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XA"><span class="nav-number">3.0.5.1.</span> <span class="nav-text">XA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SAGA"><span class="nav-number">3.0.5.2.</span> <span class="nav-text">SAGA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AT"><span class="nav-number">3.0.5.3.</span> <span class="nav-text">AT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCC"><span class="nav-number">3.0.5.4.</span> <span class="nav-text">TCC</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">aqHi</p>
+  <div class="site-description" itemprop="description">Talk is cheap , show me the shit.</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aqhi.net/2019/10/06/JAVA%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84-java%E9%9D%A2%E8%AF%95%E9%A2%98%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="aqHi">
+      <meta itemprop="description" content="Talk is cheap , show me the shit.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aqHi'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JAVA面试题组
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-06 10:20:25" itemprop="dateCreated datePublished" datetime="2019-10-06T10:20:25+08:00">2019-10-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-02-01 19:16:09" itemprop="dateModified" datetime="2021-02-01T19:16:09+08:00">2021-02-01</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="JAVA-基础"><a href="#JAVA-基础" class="headerlink" title="JAVA 基础"></a>JAVA 基础</h1><h2 id="JAVA中的几种基本数据类型是什么-各自占用多少字节"><a href="#JAVA中的几种基本数据类型是什么-各自占用多少字节" class="headerlink" title="JAVA中的几种基本数据类型是什么,各自占用多少字节?"></a>JAVA中的几种基本数据类型是什么,各自占用多少字节?</h2><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">字节(byte)</th>
+<th align="center">位数(bit)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">byte</td>
+<td align="center">1</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">boolean</td>
+<td align="center">1</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">2</td>
+<td align="center">16</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2</td>
+<td align="center">16</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">4</td>
+<td align="center">32</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4</td>
+<td align="center">32</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8</td>
+<td align="center">64</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8</td>
+<td align="center">64</td>
+</tr>
+</tbody></table>
+<h2 id="String类能被继承吗-为什么"><a href="#String类能被继承吗-为什么" class="headerlink" title="String类能被继承吗,为什么?"></a>String类能被继承吗,为什么?</h2><blockquote>
+<p>不可以,因为String类有final修饰符，而final修饰的类是不能被继承的，实现细节不允许改变。</p>
+</blockquote>
+<p>下面这段话摘自《Java编程思想》第四版第143页：</p>
+<p>使用final方法的原因有两个。</p>
+<p>第一个原因是把方法锁定，以防任何继承类修改它的含义；<br><br>第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升。在最近的Java版本中，不需要使用final方法进行这些优化了。</p>
+<h2 id="String-Stringbuffer-StringBuilder的区别"><a href="#String-Stringbuffer-StringBuilder的区别" class="headerlink" title="String, Stringbuffer, StringBuilder的区别"></a>String, Stringbuffer, StringBuilder的区别</h2><ol start="4">
+<li>String s=123”和 IString s new String(123)区别</li>
+<li>ArrayList和 I LinkedList有什么区别。</li>
+<li>讲讲类的实例化顺序,比如父类静态数据,构造函数,字段,子类静态数据,构造函数,字<br>段,当new的时候,他们的执行顺序。</li>
+<li>用过哪些Map类,都有什么区别, HashMap是线程安全的吗并发下使用的Map是什么<br>他们内部原理分别是什么,比如存储方式, hashcode,扩容,默认容量等</li>
+<li>有没有顺序的Map实现类,如果有,他们是怎么保证有序</li>
+<li>抽象类和接口的区别,类可以继承多个类么,接口可以继承多个接口么类可以实现多个接<br>口么。</li>
+<li>继承和聚合的区别在哪。</li>
+<li>反射的原理,反射创建类实例的三种方式是什么</li>
+<li>反射中, Class forName和 ClassLoader区别。</li>
+</ol>
+<h4 id="13-ClassLoader-原理、分类、加载顺序-双亲委派-加分项"><a href="#13-ClassLoader-原理、分类、加载顺序-双亲委派-加分项" class="headerlink" title="13.ClassLoader 原理、分类、加载顺序,双亲委派(加分项)"></a>13.<code>ClassLoader</code> 原理、分类、加载顺序,双亲委派(加分项)</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/javazejian/article/details/73413292">深入理解Java类加载器(ClassLoader)</a></p>
+<h5 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h5><h5 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h5><p>引导（Bootstrap）类加载器、扩展（Extension）类加载器、系统（System）类加载器（也称应用类加载器）</p>
+<h5 id="双亲委派模式"><a href="#双亲委派模式" class="headerlink" title="双亲委派模式"></a>双亲委派模式</h5><p>双亲委派模式是在Java 1.2后引入的，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式。</p>
+<ol start="14">
+<li>描述动态代理的几种实现方式,分别说出相应的优缺点。</li>
+<li>动态代理与 cglib实现的区别。</li>
+<li>为什么 CGlib方式可以对接口实现代理。(加分项)</li>
+<li>final的用途。</li>
+<li>写出三种单例模式实现。</li>
+<li>如何在父类中为子类自动完成所有的 hashcode和 equals实现?这么做有何优劣。</li>
+<li>请结合设计理念,谈谈访问修饰符 public、 private、 protected、 default在应用设计<br>中的作用。</li>
+<li>深拷贝和浅拷贝区别。</li>
+</ol>
+<ol start="22">
+<li><code>volatile</code> 可见性，有序性，如何实现的。不保证原子性</li>
+</ol>
+<p>为了解决并发缓存值不一致，最开始采取的方案是 总线加锁(需要加锁，性能差,串行化，无法充分应用多核计算机的特性)。</p>
+<p>现在采用的是 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/MESI%E5%8D%8F%E8%AE%AE"><code>MESI</code></a> 缓存一致性 和 <code>CPU总线嗅探机制</code> 。</p>
+<ul>
+<li>已修改Modified (M)</li>
+<li>独占Exclusive (E)</li>
+<li>共享Shared (S)</li>
+<li>无效Invalid (I)</li>
+</ul>
+<p>要加锁，力度小<br>一旦其他线程修改了值，总线嗅探机制会直接使自身工作内存的副本失效，让线程重新去读。</p>
+<ol start="23">
+<li>为什么volatile不能保证原子性而Atomic可以？</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mainz/p/3556430.html">参考</a></li>
+</ul>
+<h4 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h4><ul>
+<li><p><a target="_blank" rel="noopener" href="https://xilidou.com/2018/11/27/LongAdder/">从 LongAdder 中窥见并发组件的设计思路</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000023761290">阿里为什么推荐使用LongAdder，而不是volatile？</a></p>
+</li>
+</ul>
+<p>MESI协议</p>
+<ul>
+<li>缓存行是脏的（dirty），与主存的值不同。如果别的CPU内核要读主存这块数据，该缓存行必须回写到主存，状态变为共享(S).<br>独占Exclusive (E)<br>缓存行只在当前缓存中，但是干净的（clean）–缓存数据同于主存数据。当别的缓存读取它时，状态变为共享；当前写数据时，变为已修改状态。<br>共享Shared (S)<br>缓存行也存在于其它缓存中且是干净的。缓存行可以在任意时刻抛弃。<br>无效Invalid (I)<br>缓存行是无效的</li>
+</ul>
+<h1 id="计算机基础、操作系统"><a href="#计算机基础、操作系统" class="headerlink" title="计算机基础、操作系统"></a>计算机基础、操作系统</h1><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><h4 id="死锁的四个条件"><a href="#死锁的四个条件" class="headerlink" title="死锁的四个条件"></a>死锁的四个条件</h4><ul>
+<li>禁止抢占（<code>no preemption</code>）：系统资源不能被强制从一个进程中退出。</li>
+<li>持有和等待（<code>hold and wait</code>）：一个进程可以在等待时持有系统资源。</li>
+<li>互斥（<code>mutual exclusion</code>）：资源只能同时分配给一个行程，无法多个行程共享。</li>
+<li>循环等待（<code>circular waiting</code>）：一系列进程互相持有其他进程所需要的资源。</li>
+</ul>
+<h1 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h1><h3 id="MySql索引定义、如何设计、最左匹配的考查。"><a href="#MySql索引定义、如何设计、最左匹配的考查。" class="headerlink" title="MySql索引定义、如何设计、最左匹配的考查。"></a>MySql索引定义、如何设计、最左匹配的考查。</h3><h3 id="Mysql悲观锁和乐观锁。"><a href="#Mysql悲观锁和乐观锁。" class="headerlink" title="Mysql悲观锁和乐观锁。"></a>Mysql悲观锁和乐观锁。</h3><h3 id="MySql的事务隔离级别-如何实现可重复读的-MVCC-间隙锁。"><a href="#MySql的事务隔离级别-如何实现可重复读的-MVCC-间隙锁。" class="headerlink" title="MySql的事务隔离级别,如何实现可重复读的,MVCC,间隙锁。"></a>MySql的事务隔离级别,如何实现可重复读的,MVCC,间隙锁。</h3><table>
+<thead>
+<tr>
+<th align="center">隔离级别</th>
+<th align="center">脏读(Dirty Read)</th>
+<th align="center">不可重复读(Non-Repeatable Read)</th>
+<th align="center">幻读(Phantom Read)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">读未提交(READ-UNCOMMITTED)</td>
+<td align="center">√</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">读已提交(READ-COMMITTED)</td>
+<td align="center">⨉</td>
+<td align="center">√</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">可重复度(REPEATABLE-READ)</td>
+<td align="center">⨉</td>
+<td align="center">⨉</td>
+<td align="center">√</td>
+</tr>
+<tr>
+<td align="center">可串行化(SERIALIZABLE)</td>
+<td align="center">⨉</td>
+<td align="center">⨉</td>
+<td align="center">⨉</td>
+</tr>
+</tbody></table>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/48269420">间隙锁</a></li>
+<li>间隙锁只有在事务隔离级别 RR 中才会产生，事务级别是RC（读已提交）级别的话，间隙锁将会失效</li>
+<li>唯一索引只有锁住多条记录或者一条不存在的记录的时候，才会产生间隙锁，指定给某条存在的记录加锁的时候，只会加记录锁，不会产生间隙锁；</li>
+<li>普通索引不管是锁住单条，还是多条记录，都会产生间隙锁；</li>
+<li>间隙锁会封锁该条记录相邻两个键之间的空白区域，防止其它事务在这个区域内插入、修改、删除数据，这是为了防止出现 幻读 现象；</li>
+<li>普通索引的间隙，优先以普通索引排序，然后再根据主键索引排序；</li>
+</ul>
+<p>参考:<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/743691">彻底搞懂 MySQL 事务的隔离级别</a></p>
+<h3 id="事务的ACID、BASE原理、CAP原则。"><a href="#事务的ACID、BASE原理、CAP原则。" class="headerlink" title="事务的ACID、BASE原理、CAP原则。"></a>事务的ACID、BASE原理、CAP原则。</h3><h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><ul>
+<li>是指数据库管理系统（DBMS）在写入或更新资料的过程中，为保证事务（<code>transaction</code>）是正确可靠的，所必须具备的四个特性：原子性（<code>atomicity</code>，或称不可分割性）、一致性（<code>consistency</code>）、隔离性（<code>isolation</code>，又称独立性）、持久性（<code>durability</code>）。</li>
+</ul>
+<blockquote>
+<p>Atomicity（原子性）：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。[1]</p>
+</blockquote>
+<blockquote>
+<p>Consistency（一致性）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设约束、触发器、级联回滚等。[1]</p>
+</blockquote>
+<blockquote>
+<p>Isolation（隔离性）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括未提交读（Read uncommitted）、提交读（read committed）、可重复读（repeatable read）和串行化（Serializable）。[1]<br>Durability（持久性）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</p>
+</blockquote>
+<hr>
+<h4 id="CAP原则-定理"><a href="#CAP原则-定理" class="headerlink" title="CAP原则(定理)"></a>CAP原则(定理)</h4><ul>
+<li>指的是在一个分布式系统中， Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三者不可得兼。</li>
+</ul>
+<hr>
+<h4 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h4><ul>
+<li>BASE是Basically Available（基本可用）、Soft state（软状态）和Eventually consistent（最终一致性）三个短语的简写，BASE是对CAP中一致性和可用性权衡的结果，其来源于对大规模互联网系统分布式实践的结论，是基于CAP定理逐步演化而来的，其核心思想是即使无法做到强一致性（Strong consistency），但每个应用都可以根据自身的业务特点，采用适当的方式来使系统达到最终一致性（Eventual consistency）</li>
+</ul>
+<p>参考:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/duanxz/p/5229352.html">CAP原则(CAP定理)、BASE理论</a></p>
+<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78599954">分布式事务的4种模式</a></li>
+</ul>
+<p>分布式事务框架 <code>seata</code> <a target="_blank" rel="noopener" href="http://seata.io/zh-cn/docs/overview/what-is-seata.html">官方文档</a></p>
+<h4 id="XA"><a href="#XA" class="headerlink" title="XA"></a>XA</h4><p>XA是X/Open DTP组织（X/Open DTP group）定义的两阶段提交协议，XA被许多数据库（如Oracle、DB2、SQL Server、MySQL）和中间件等工具(如CICS 和 Tuxedo)本地支持 。<br>X/Open DTP模型（1994）包括应用程序（AP）、事务管理器（TM）、资源管理器（RM）。</p>
+<p>XA接口函数由数据库厂商提供。XA规范的基础是两阶段提交协议2PC。<br>JTA(Java Transaction API) 是Java实现的XA规范的增强版 接口。</p>
+<p>在XA模式下，需要有一个[全局]协调器，每一个数据库事务完成后，进行第一阶段预提交，并通知协调器，把结果给协调器。协调器等所有分支事务操作完成、都预提交后，进行第二步；第二步：协调器通知每个数据库进行逐个commit/rollback。<br>其中，这个全局协调器就是XA模型中的TM角色，每个分支事务各自的数据库就是RM。</p>
+<h4 id="SAGA"><a href="#SAGA" class="headerlink" title="SAGA"></a>SAGA</h4><p>Saga 理论出自 Hector &amp; Kenneth 1987发表的论文 Sagas。<br>saga模式的实现，是长事务解决方案。</p>
+<p>Saga 是一种补偿协议，在 Saga 模式下，分布式事务内有多个参与者，每一个参与者都是一个冲正补偿服务，需要用户根据业务场景实现其正向操作和逆向回滚操作。</p>
+<h4 id="AT"><a href="#AT" class="headerlink" title="AT"></a>AT</h4><p>AT 模式是一种无侵入的分布式事务解决方案。</p>
+<p>阿里seata框架，实现了该模式。</p>
+<p>在 AT 模式下，用户只需关注自己的“业务 SQL”，用户的 “业务 SQL” 作为一阶段，Seata 框架会自动生成事务的二阶段提交和回滚操作。</p>
+<h4 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h4><p>TCC 模式需要用户根据自己的业务场景实现 Try、Confirm 和 Cancel 三个操作；事务发起方在一阶段执行 Try 方式，在二阶段提交执行 Confirm 方法，二阶段回滚执行 Cancel 方法。</p>
+<ul>
+<li>关于 TCC（Try-Confirm-Cancel）的概念，最早是由 Pat Helland 于 2007 年发表的一篇名为《Life beyond Distributed Transactions:an Apostate’s Opinion》的论文提出。 TCC 事务机制相比于上面介绍的 XA，解决了其几个缺点：</li>
+</ul>
+<p>解决了协调者单点，由主业务方发起并完成这个业务活动。业务活动管理器也变成多点，引入集群。<br>同步阻塞：引入超时，超时后进行补偿，并且不会锁定整个资源，将资源转换为业务逻辑形式，粒度变小。<br>数据一致性，有了补偿机制之后，由业务活动管理器控制一致性<br>TCC(Try Confirm Cancel)<br>Try 阶段：尝试执行，完成所有业务检查（一致性）, 预留必须业务资源（准隔离性）<br>Confirm 阶段：确认执行真正执行业务，不作任何业务检查，只使用 Try 阶段预留的业务资源，Confirm 操作满足幂等性。要求具备幂等设计，Confirm 失败后需要进行重试。<br>Cancel 阶段：取消执行，释放 Try 阶段预留的业务资源 Cancel 操作满足幂等性 Cancel 阶段的异常和 Confirm 阶段异常处理方案基本上一致。</p>
+<p>在 Try 阶段，是对业务系统进行检查及资源预览，比如订单和存储操作，需要检查库存剩余数量是否够用，并进行预留，预留操作的话就是新建一个可用库存数量字段，Try 阶段操作是对这个可用库存数量进行操作。<br>基于 TCC 实现分布式事务，会将原来只需要一个接口就可以实现的逻辑拆分为 Try、Confirm、Cancel 三个接口，所以代码实现复杂度相对较高。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/12/09/Docker%20MySQL(mariadb)%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-dockermysqlmariadb%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" rel="prev" title="Docker MySQL(mariadb) 安装配置及注意事项">
+                  <i class="fa fa-chevron-left"></i> Docker MySQL(mariadb) 安装配置及注意事项
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/08/13/%E4%BA%8C%E5%8F%89%E6%A0%91%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E5%BA%94%E7%94%A8-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E5%BA%94%E7%94%A8/" rel="next" title="二叉树、红黑树的数据结构及应用">
+                  二叉树、红黑树的数据结构及应用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">aqHi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
